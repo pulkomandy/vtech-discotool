@@ -106,17 +106,27 @@ int main(int argc, char* argv[])
 		BFile file(outFile.c_str(), B_READ_ONLY);
 		port.Write("ERS%", 4);
 		char buffer[257] = {0};
-		int len = port.Read(buffer, 256);
+		int len = 0;
+		do {
+			len += port.Read(buffer + len, 256 - len);
+			buffer[len] = 0;
+		} while(strstr(buffer, "ACK\n") == NULL);
 
 		uint16_t value;
 		int index = 0;
 		while (file.Read(&value, 2) == 2) {
-			char buffer[12];
-			sprintf(buffer, "W%02x:%02x%", index, value);
+			char buffer[257] = {0};
+			sprintf(buffer, "W%02x:%02x%%", index, value);
 
 			port.Write(buffer, strlen(buffer));
-			char buffer[257] = {0};
 			int len = port.Read(buffer, 256);
+			if (len < 4) {
+				len += port.Read(buffer + len, 256 - len);
+			}
+			buffer[len] = 0;
+			if (strncmp(buffer, "ACK\n", 4) != 0) {
+				printf("Write error! %s\n", buffer);
+			}
 
 			index++;
 			if ((index & 0xFFF) == 0) {
