@@ -1,5 +1,5 @@
 all:
-	g++ -o discotool main.cpp -ldevice -lbe -lboost_program_options
+	g++ -o discotool discotool.cpp -ldevice -lbe -lboost_program_options
 
 recompile:
 	rm discotool
