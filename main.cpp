@@ -1,6 +1,6 @@
 /*
  * Disco-Cart C++ tool
- * Copyright (C) 2021 pulkomandy <pulkomandy@kitt>
+ * Copyright (C) 2021-2024 pulkomandy <pulkomandy@kitt>
  *
  * Distributed under terms of the MIT license.
  *
